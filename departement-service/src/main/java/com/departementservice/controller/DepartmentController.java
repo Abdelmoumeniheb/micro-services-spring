@@ -1,5 +1,7 @@
 package com.departementservice.controller;
 
+import com.departementservice.client.EmployeeClient;
+import com.departementservice.config.WebClientConfig;
 import com.departementservice.model.Department;
 
 import com.departementservice.repository.DepartmentRepository;
@@ -17,6 +19,8 @@ public class DepartmentController {
     //private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentController.class);
     @Autowired
     private DepartmentRepository departmentRepository;
+    @Autowired
+    private EmployeeClient employeeClient;
     @PostMapping
     public Department add(@RequestBody Department d){
         //LOGGER.info("Department add:{}",d);
@@ -29,5 +33,11 @@ public class DepartmentController {
     @GetMapping("/{id}")
     public Department findById(@PathVariable Long id){
         return departmentRepository.findby(id);
+    }
+    @GetMapping("/with-employees")
+    public List<Department> findAllWithEmployee(){
+        List<Department> departments=departmentRepository.getAll();
+        departments.forEach(d->d.setEmployees(employeeClient.findByDepartment(d.getId())));
+        return departments;
     }
 }
