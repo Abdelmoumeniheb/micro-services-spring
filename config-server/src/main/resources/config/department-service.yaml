@@ -1,0 +1,15 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: department-service
+eureka:
+  instance:
+    hostname: localhost
+  cleint:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+managment:
+  tracing:
+    sampling:
+      probability : 1.0
